@@ -1,0 +1,32 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "make -j -s TARGET=build"
+        },
+        {
+            "label": "Re-Build",
+            "type": "shell",
+            "command": "make -s clean; make -j -s TARGET=build"
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "make -s clean",
+        },
+        {
+            "label": "Build + Flash",
+            "type": "shell",
+            "command": "make -j -s flash"
+        },
+        {
+            "label": "Size",
+            "type": "shell",
+            "command": "arm-none-eabi-size .\\build\\*.elf -A;arm-none-eabi-size .\\build\\*.elf -B"
+        }
+    ]
+}

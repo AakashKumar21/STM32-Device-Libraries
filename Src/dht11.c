@@ -3,12 +3,12 @@
 DHT11_Status DHT11_read(GPIO_TypeDef* port, uint16_t pin, 
                         uint8_t* temp, uint8_t *hum){
     // REQUEST SIGNAL
-	_set_as_input(port,pin);
+	_set_as_output(port,pin);
     HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
-    delay_us(18000);
+    delay_us(19000);
     HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET);
     delay_us(20);
-    _set_as_output(port,pin);
+    _set_as_input(port,pin);
 
 	// READ RESPONSE
 	delay_us(40);
@@ -35,7 +35,13 @@ DHT11_Status DHT11_read(GPIO_TypeDef* port, uint16_t pin,
 	_read_byte(port,pin); // ignore decimal part
 	*hum = _read_byte(port,pin);
 	_read_byte(port,pin); // ignore decimal part
-	return DHT11_OK;
+	uint8_t checksum =  _read_byte;
+	if(checksum == *temp+*hum) return DHT11_OK;
+	else DHT11_Checksum_Error;
+
+	// Set pin as output and high
+	_set_as_output(port,pin);
+	HAL_GPIO_WritePin(port,pin,GPIO_PIN_SET);
 }
 
 static uint8_t _read_byte(GPIO_TypeDef* port, uint16_t pin){
