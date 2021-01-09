@@ -3,18 +3,31 @@
         {
             "name": "STM32",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/Inc",
+                "${workspaceFolder}/Src",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Inc",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy",
+                "${workspaceFolder}/Drivers/STM32F1xx_HAL_Driver/Src",
+                "${workspaceFolder}/Drivers/CMSIS/Include/",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F1xx/Include",
+                "${workspaceFolder}/Drivers/CMSIS/Device/ST/STM32F1xx/Source",
+                "${env:ARM_GCC}/armcc/lib/gcc/arm-none-eabi/7.2.1/include",
+                "${env:ARM_GCC}/armcc/lib/gcc/arm-none-eabi/7.2.1/include-fixed",
             ],
             "defines": [
                 "_DEBUG",
+                "DEBUG",
                 "UNICODE",
                 "_UNICODE",
                 "STM32F103xB",
-                "USE_HAL_DRIVER"
+                "USE_HAL_DRIVER",
+                "USE_FULL_ASSERT",
+                "USE_DEVICE_MODE"
             ],
             "compilerPath": "${ARM_GCC}\\arm-none-eabi-gcc.exe",
             "cStandard": "c11",
-            "cppStandard": "c++14",
+            "cppStandard": "c++17",
             "intelliSenseMode": "gcc-arm"
         }
     ],

@@ -5,3 +5,5 @@
 Debug/
 Drivers/
 Build/
+.vscode/.cortex-debug.peripherals.state.json
+.vscode/.cortex-debug.registers.state.json
