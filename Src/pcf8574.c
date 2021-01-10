@@ -27,3 +27,9 @@ PCF8574_WritePin(I2C_HandleTypeDef *i2c_handle, PCF8574_HandleTypeDef *pcf_handl
 
     return HAL_I2C_Master_Transmit(i2c_handle, pcf_handle->address, &(pcf_handle->output_value), 1, 1);
 }
+
+HAL_StatusTypeDef 
+PCF8574_ReadPin(I2C_HandleTypeDef *i2c_handle, PCF8574_HandleTypeDef *pcf_handle, uint8_t pin, uint8_t* val)
+{
+    return HAL_I2C_Master_Receive(i2c_handle,pcf_handle->address | 1,val,1,1);
+}
