@@ -2,34 +2,40 @@
 #include <stdint.h>
 #include "max7219.h"
 
-void MAX7219_send_byte(MAX7219_HandleTypeDef *handle, uint8_t byte){
+
+static void MAX7219_write_to_reg(MAX7219_HandleTypeDef *handle, uint8_t address, uint8_t data){
+    HAL_GPIO_WritePin(handle->port, handle->cs, GPIO_PIN_RESET); // Chip select enable
     HAL_GPIO_WritePin(handle->port, handle->clk, GPIO_PIN_RESET);
-    for(int i=0; i<8;i++){
-        if(byte & 0x80){ // msb
-            HAL_GPIO_WritePin(handle->port, handle->din, GPIO_PIN_SET);   
+    uint8_t array[2] = {address,data};
+    // Send address and data
+    // Send address then data
+    for(int array_index=0; array_index<2;array_index++){
+        for(int i=0; i<8;i++){
+            if(array[array_index] & 0x80){ // msb
+                HAL_GPIO_WritePin(handle->port, handle->din, GPIO_PIN_SET);   
+            }
+            else{
+                HAL_GPIO_WritePin(handle->port, handle->din, GPIO_PIN_RESET);   
+            }
+            array[array_index] = array[array_index] << 1;
+            HAL_GPIO_WritePin(handle->port, handle->clk, GPIO_PIN_SET);
+            DELAY;
+            HAL_GPIO_WritePin(handle->port, handle->clk, GPIO_PIN_RESET);
+            DELAY;
         }
-        else{
-            HAL_GPIO_WritePin(handle->port, handle->din, GPIO_PIN_RESET);   
-        }
-        byte = byte << 1;
-        HAL_GPIO_WritePin(handle->port, handle->clk, GPIO_PIN_SET);
-        DELAY;
-        HAL_GPIO_WritePin(handle->port, handle->clk, GPIO_PIN_RESET);
-        DELAY;
-    } 
+    }
+    HAL_GPIO_WritePin(handle->port, handle->cs, GPIO_PIN_SET);
 }
 
 void MAX7219_DisplayTest(MAX7219_HandleTypeDef *handle,uint8_t test){
-    HAL_GPIO_WritePin(handle->port, handle->cs, GPIO_PIN_RESET);
     uint8_t address = MAX7219_DIS_TEST;
-    // Register Address
-    MAX7219_send_byte(handle,address);
-    // Send Register data
+    uint8_t data;
     if(test == 1){
-        MAX7219_send_byte(handle, 1);
+        data = 1;
     }
     else {
-        MAX7219_send_byte(handle, 0);
+        data = 0;
     }
-    HAL_GPIO_WritePin(handle->port, handle->cs, GPIO_PIN_SET);
+    MAX7219_write_to_reg(handle,address,data);
+    HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 }

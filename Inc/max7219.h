@@ -13,7 +13,7 @@
 #include <main.h>
 #include <stdint.h> 
 
-// #define USE_HAL_DELAY
+#define USE_HAL_DELAY
 #if defined(USE_HAL_DELAY)
 #define DELAY HAL_Delay(1)
 #endif
@@ -71,6 +71,14 @@ void MAX7219_NoDecode(MAX7219_HandleTypeDef *handle, uint8_t decode);
 * @brief Turn on/off decode mode
 * @param handle pointer to max7219 handle
 * @param decode 1 for no decode mode, 0 for decode mode
+* @return void
+*/
+
+static void MAX7219_write_to_reg(MAX7219_HandleTypeDef *handle, uint8_t address, uint8_t data);
+/** 
+* @brief Write data to register
+* @param handle pointer to max7219 handle
+* @param array array of uint8_t of size 2, {address,data}
 * @return void
 */
 
