@@ -39,3 +39,8 @@ void MAX7219_DisplayTest(MAX7219_HandleTypeDef *handle,uint8_t test){
     MAX7219_write_to_reg(handle,address,data);
     HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 }
+
+void MAX7219_SetIntensity(MAX7219_HandleTypeDef *handle,uint8_t intensity){
+    uint16_t address = MAX7219_INTENSITY;
+    MAX7219_write_to_reg(handle,address,intensity);
+}
