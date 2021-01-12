@@ -4,6 +4,7 @@
 
 
 static void MAX7219_write_to_reg(MAX7219_HandleTypeDef *handle, uint8_t address, uint8_t data){
+    DELAY;
     HAL_GPIO_WritePin(handle->port, handle->cs, GPIO_PIN_RESET); // Chip select enable
     HAL_GPIO_WritePin(handle->port, handle->clk, GPIO_PIN_RESET);
     uint8_t array[2] = {address,data};
@@ -41,6 +42,29 @@ void MAX7219_DisplayTest(MAX7219_HandleTypeDef *handle,uint8_t test){
 }
 
 void MAX7219_SetIntensity(MAX7219_HandleTypeDef *handle,uint8_t intensity){
-    uint16_t address = MAX7219_INTENSITY;
+    uint8_t address = MAX7219_INTENSITY;
     MAX7219_write_to_reg(handle,address,intensity);
+}
+
+void MAX7219_WritePattern(MAX7219_HandleTypeDef *handle, uint8_t *pattern){
+    uint8_t address = 1;
+    for(int i=0; i<8; i++){
+        MAX7219_write_to_reg(handle,address,pattern[i]);
+        address++;
+    }
+}
+
+void MAX7219_NoDecode(MAX7219_HandleTypeDef *handle, uint8_t decode){
+    uint8_t address = MAX7219_DECODE_MODE;
+    MAX7219_write_to_reg(handle,address,decode);
+}
+
+void MAX7219_ScanLimit(MAX7219_HandleTypeDef *handle, uint8_t limit){
+    uint8_t address = MAX7219_SCAN_LIM;
+    MAX7219_write_to_reg(handle,address,limit);
+}
+
+void MAX7219_Shutdown(MAX7219_HandleTypeDef *handle,uint8_t shut){
+    uint8_t ad = MAX7219_SHUTDOWN;
+    MAX7219_write_to_reg(handle, ad, shut);
 }
