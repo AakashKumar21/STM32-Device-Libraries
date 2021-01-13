@@ -39,7 +39,7 @@
 #define MAX7219_DIS_TEST 0xF
 
 
-/* MAX7219 Register Data Values -----------------------------------------------------------*/
+/* MAX7219 Register Data Values ------------------------------------------------*/
 #define SHUTDOWN_TRUE 0x0
 #define SHUTDOWN_FALSE 0x1
 #define DECODE_ON 0x1
