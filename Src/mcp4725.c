@@ -19,5 +19,6 @@ MCP4725_WakeUp(I2C_HandleTypeDef *i2c, MCP4725_HandleTypeDef* mcp){
 
 HAL_StatusTypeDef 
 MCP4725_SetOutput(I2C_HandleTypeDef *i2c, MCP4725_HandleTypeDef* mcp uint16_t out){
-    // HAL_I2C_Master_Transmit(i2c,mcp->address,mcp.)
+    uint8_t data[3] = {mcp->cmd_pwr, out & 0xFF00, out & 0xff};
+    HAL_I2C_Master_Transmit(i2c,mcp->address,data,3,1);
 }

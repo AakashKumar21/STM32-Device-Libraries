@@ -22,8 +22,8 @@
 #define MCP4725_WRITE_EEPROM 0x06
 #define MCP4725_WRITE_DAC 0x06
 // Write Command Types
-#define MCP4725_CMD_ADC 0x00 // Fast
-#define MCP4725_CMD_DAC 0x02
+#define MCP4725_CMD_DAC 0x00 // Fast
+#define MCP4725_CMD_EEPROM 0x02
 #define MCP4725_CMD_BOTH 0x03
 // General Call 
 #define MCP4725_GEN_RST 0x06
@@ -34,12 +34,11 @@
 // Address | R/W | 3bit mode | 2bit power down mode| Lower adc 4bit ||| higer adc 4 bit
 // ||| -> start i2c tx again
 
-/* Handle Type Def ---------------------------------------------------------*/
-typedef struct // TODO, use bit fields
+/* Type Defs ---------------------------------------------------------*/
+typedef struct 
 {
-    uint8_t address :  8;  // address with write mode, left shifted by 1
-    uint8_t cmd_type : 3;
-    uint8_t pwr_mode : 2;
+    uint8_t address;  // address with write mode, << 1
+    uint8_t cmd_pwr;  // Command type and power mode is combined into one and << 4
 }MCP4725_HandleTypeDef;
 
 // TODO, maybe add init function
