@@ -25,6 +25,9 @@
 #define MCP4725_CMD_ADC 0x00 // Fast
 #define MCP4725_CMD_DAC 0x02
 #define MCP4725_CMD_BOTH 0x03
+// General Call 
+#define MCP4725_GEN_RST 0x06
+#define MCP4725_GEN_WAKE 0x09
 
 /* Write DAC Register using Fast Mode Write Command (From Datasheet)--------*/
 // msb - - - - lsb
@@ -34,9 +37,9 @@
 /* Handle Type Def ---------------------------------------------------------*/
 typedef struct // TODO, use bit fields
 {
-    uint8_t address; // left shifted by 1
-    uint8_t power_mode;
-    uint8_t write_mode;
+    uint8_t address :  8;  // address with write mode, left shifted by 1
+    uint8_t cmd_type : 3;
+    uint8_t pwr_mode : 2;
 }MCP4725_HandleTypeDef;
 
 // TODO, maybe add init function
