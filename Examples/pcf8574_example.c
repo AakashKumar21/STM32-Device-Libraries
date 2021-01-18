@@ -7,7 +7,7 @@ void pcf8574_example(){
     // Initilise PCF8574 Handle 
     // I2C address of pcf must be left shifted of actual address
     PCF8574_HandleTypeDef pcf;
-    pcf.address = 0x20 << 1;
+    pcf.address = 0x20 << 1;  // Address(left shifted)
     pcf.output_value = 0;
     // Write to pin and also check i2c transaction status
     int status;
