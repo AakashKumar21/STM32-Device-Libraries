@@ -15,24 +15,20 @@
 /* MCP4725 Register Values -------------------------------------------------*/
 // Power Down Modes
 #define MCP4725_PWR_DOWN_0 0x00
-#define MCP4725_PWR_DOWN_1 0x01
-#define MCP4725_PWR_DOWN_2 0x02
-#define MCP4725_PWR_DOWN_3 0x03
-// Write to EEPROM or DAC Register
-#define MCP4725_WRITE_EEPROM 0x06
-#define MCP4725_WRITE_DAC 0x06
+#define MCP4725_PWR_DOWN_1 0x02
+#define MCP4725_PWR_DOWN_2 0x04
+#define MCP4725_PWR_DOWN_3 0x06
 // Write Command Types
-#define MCP4725_CMD_DAC 0x00 // Fast
-#define MCP4725_CMD_EEPROM 0x02
-#define MCP4725_CMD_BOTH 0x03
-// General Call 
+#define MCP4725_CMD_FAST 0x00 // Fast, TODO
+#define MCP4725_CMD_DAC  0x40
+#define MCP4725_CMD_BOTH 0x60
+// General Call , // TODO
 #define MCP4725_GEN_RST 0x06
 #define MCP4725_GEN_WAKE 0x09
 
-/* Write DAC Register using Fast Mode Write Command (From Datasheet)--------*/
+/* Protocol (From Datasheet)--------*/
 // msb - - - - lsb
-// Address | R/W | 3bit mode | 2bit power down mode| Lower adc 4bit ||| higer adc 4 bit
-// ||| -> start i2c tx again
+//| Ad.RW | C2.C1.C0.X.X.PD1.PD0.X | msb byte | lsb 4 bits.X.X.X.X |
 
 /* Type Defs ---------------------------------------------------------*/
 typedef struct 
@@ -63,13 +59,22 @@ MCP4725_WakeUp(I2C_HandleTypeDef *i2c, MCP4725_HandleTypeDef* mcp);
 */
 
 HAL_StatusTypeDef 
-MCP4725_SetOutput(I2C_HandleTypeDef *i2c, MCP4725_HandleTypeDef* mcp uint16_t out);
+MCP4725_SetOutput(I2C_HandleTypeDef *i2c, MCP4725_HandleTypeDef* mcp, uint16_t out);
 /** 
 * @brief Set output voltage
 * @param i2c pointer to i2c handle
 * @param mcp pointer mcp4275 handle
 * @param out output value (12 bit)
 * @return HAL_StatusTypeDef for i2c transaction
+*/
+
+HAL_StatusTypeDef 
+MCP4725_TestOutput(I2C_HandleTypeDef *i2c, MCP4725_HandleTypeDef* mcp);
+/** 
+* @brief Test i2c and mcp4725 by outputting sinwave
+* @param i2c pointer to i2c handle
+* @param mcp pointer mcp4275 handle
+* @return HAL_StatusTypeDef
 */
 
 
