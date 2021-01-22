@@ -21,7 +21,6 @@
 #include "main.h"
 #include "i2c.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -32,6 +31,7 @@
 #include <stdio.h>
 #include "pcf8574.h"
 #include "max7219.h"
+#include "mcp4725.h"
 
 /* USER CODE END Includes */
 
@@ -63,7 +63,26 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+int uart_tx_complete = 0;
 
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
+  // uint8_t msg[] = "Hello\n";
+  // HAL_UART_Transmit_IT(&huart2,msg,sizeof(msg));
+  volatile int uart_tx_complete = 1;
+}
+
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
+  static int samples = 0;
+  static int adc_val = 0;
+  // adc_val += HAL_ADC_GetValue(&hadc1);
+  adc_val = HAL_ADC_GetValue(&hadc1);
+
+  uint8_t buffer[5];
+  sprintf(buffer,"%d,",adc_val);
+  HAL_UART_Transmit_IT(&huart2,buffer,sizeof(buffer));
+}
+
+MCP4725_HandleTypeDef dac = {0b1100000 << 1, MCP4725_CMD_DAC};
 /* USER CODE END 0 */
 
 /**
@@ -96,7 +115,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM1_Init();
-  MX_USART2_UART_Init();
   MX_I2C1_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
@@ -105,11 +123,20 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
+  uint8_t msg[] = "Hello\n";
+  HAL_UART_Transmit_IT(&huart2,msg,sizeof(msg));
+  HAL_Delay(1);
+  HAL_ADC_Start_IT(&hadc1);
+  int i=0;
   while (1)
   {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    HAL_Delay(7);
+    MCP4725_SetOutput(&hi2c2,&dac,i++);
+    if(i>4095) i=0;
   }
   /* USER CODE END 3 */
 }
